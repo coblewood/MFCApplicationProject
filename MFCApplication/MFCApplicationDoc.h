@@ -23,6 +23,7 @@ public:
 // Overrides
 public:
 	virtual BOOL OnNewDocument();
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	virtual void Serialize(CArchive& ar);
 #ifdef SHARED_HANDLERS
 	virtual void InitializeSearchContent();
@@ -32,6 +33,11 @@ public:
 // Implementation
 public:
 	CCircle GetCircle() { return circle; }
+	void SetCircle(CCircle& newCircle) {
+		circle.SetCenterX(newCircle.GetCenterX());
+		circle.SetCenterY(newCircle.GetCenterY());
+		circle.SetRadius(newCircle.GetRadius());
+	}
 	virtual ~CMFCApplicationDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -52,5 +58,6 @@ public:
 	afx_msg void OnCircleEdit();
 
 private:
-	CCircle circle {100, 100, 50};
+	CCircle circle;
+	
 };

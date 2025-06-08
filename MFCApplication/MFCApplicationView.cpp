@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CMFCApplicationView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_COMMAND(ID_CIRCLE_NEW, &CMFCApplicationView::OnCircleNew)
 END_MESSAGE_MAP()
 
 // CMFCApplicationView construction/destruction
@@ -59,8 +60,19 @@ void CMFCApplicationView::OnDraw(CDC* pDC)
 		return;
 
 	CCircle& circleToDraw = pDoc->GetCircle();
-	pDC->Ellipse(circleToDraw.center_x - circleToDraw.radius, circleToDraw.center_y - circleToDraw.radius,
-		circleToDraw.center_x + circleToDraw.radius, circleToDraw.center_y + circleToDraw.radius);
+	if (drawCircle)
+	{
+		circleToDraw.SetCenterX(100);
+		circleToDraw.SetCenterY(100);
+		circleToDraw.SetRadius(50);
+		pDoc->SetCircle(circleToDraw);
+	}
+		pDC->Ellipse(
+			circleToDraw.GetCenterX() - circleToDraw.GetRadius(), 
+			circleToDraw.GetCenterY() - circleToDraw.GetRadius(),
+			circleToDraw.GetCenterX() + circleToDraw.GetRadius(), 
+			circleToDraw.GetCenterY() + circleToDraw.GetRadius()
+		);
 }
 
 
@@ -105,3 +117,11 @@ CMFCApplicationDoc* CMFCApplicationView::GetDocument() const // non-debug versio
 
 
 // CMFCApplicationView message handlers
+
+void CMFCApplicationView::OnCircleNew()
+{
+	drawCircle = true;
+	Invalidate();
+	UpdateWindow();
+	drawCircle = false;
+}

@@ -44,14 +44,23 @@ BOOL CMFCApplicationDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+	circle.SetCenterX(0);
+	circle.SetCenterX(0);
+	circle.SetRadius(0);
+	UpdateAllViews(NULL);
 
 	return TRUE;
 }
 
+BOOL CMFCApplicationDoc::OnOpenDocument(LPCTSTR lpszPathName)
+{
+	if (!CDocument::OnOpenDocument(lpszPathName))
+		return FALSE;
 
+	UpdateAllViews(NULL);
 
+	return TRUE;
+}
 
 // CMFCApplicationDoc serialization
 
@@ -59,11 +68,20 @@ void CMFCApplicationDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		ar << circle.GetCenterX();
+		ar << circle.GetCenterY();
+		ar << circle.GetRadius();
 	}
 	else
 	{
-		// TODO: add loading code here
+		int x, y, r;
+		ar >> x;
+		ar >> y;
+		ar >> r;
+
+		circle.SetCenterX(x);
+		circle.SetCenterY(y);
+		circle.SetRadius(r);
 	}
 }
 
@@ -142,14 +160,14 @@ void CMFCApplicationDoc::OnCircleEdit()
 {
 	// TODO: Add your command handler code here
 	EditCircleDlg editCircleDlgBox;
-	editCircleDlgBox.c_radius = circle.radius;
-	editCircleDlgBox.c_center_x = circle.center_x;
-	editCircleDlgBox.c_center_y = circle.center_y;
+	editCircleDlgBox.c_radius = circle.GetRadius();
+	editCircleDlgBox.c_center_x = circle.GetCenterX();
+	editCircleDlgBox.c_center_y = circle.GetCenterY();
 
 	if (editCircleDlgBox.DoModal() == IDOK) {
-		circle.radius = editCircleDlgBox.c_radius;
-		circle.center_x = editCircleDlgBox.c_center_x;
-		circle.center_y = editCircleDlgBox.c_center_y;
+		circle.SetRadius(editCircleDlgBox.c_radius);
+		circle.SetCenterX(editCircleDlgBox.c_center_x);
+		circle.SetCenterY(editCircleDlgBox.c_center_y);
 		UpdateAllViews(NULL);
 	}
 }

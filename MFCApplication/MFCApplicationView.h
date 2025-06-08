@@ -40,6 +40,11 @@ protected:
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnCircleNew();
+
+private:
+	bool drawCircle {false};
 };
 
 #ifndef _DEBUG  // debug version in MFCApplicationView.cpp
